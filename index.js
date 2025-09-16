@@ -47,5 +47,34 @@ app.post("/contact",(req,res)=>{
 
 })
 
+app.post("/subscribe",(req,res)=>{
+
+    const {email} = req.body;
+    console.log(req.body)
+
+    const mailOptions = {
+        from: process.env.USER,
+        to: "mail@usesfoundation.org",
+        subject: "USES Foundation Website Subscriber",
+        text: "email:"+email
+      };
+
+
+      if(!(email))
+        return res.json({status:"Not Ok",message:"Message not sent",error:"Name, Email, Message is required"})
+
+      
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log("Error:", error);
+        } else {
+          console.log("Email sent:", info.response);
+        }
+      });
+
+      return res.json({status:"Ok",message:"Message sent successfully"})
+
+})
+
 
 app.listen(process.env.PORT,()=>console.log(`Server is running at port ${process.env.PORT}`))
